@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <title>PH-TUBE</title>
+    <style>
+        .active{
+            background-color:#FF1F3D;
+            color: aliceblue;
+        }
+    </style>
+
+</head>
+<body>
+   <header>
+    <nav class="w-11/12 mx-auto flex justify-between border-b-2 py-5 border-[#17171720]">
+        <div class="logo">
+            <img class="w-[120px]" src="assets/Logo.png" alt="">
+        </div>
+        <div class="sort">
+            <button>Sort by view</button>
+        </div>
+        <div class="blogs">
+            <button class="btn bg-[#FF1F3D] text-white">blogs</button>
+        </div>
+    </nav>
+   </header>
+   <nav class=" category-container flex py-4 justify-center gap-5">
+    <div class="">
+        <button onclick="loadVideos()" class="btn btn-sm bg-[#FF1F3D]">All</button>
+    </div>
+    
+    
+   </nav>
+
+   <section id="video-container" class="w-11/12 mx-auto grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-5">
+    <div class="col-span-full text-center flex justify-center items-center flex-col py-20">
+        <img class="w-[120px] h-[]" src="assets/Icon.png" alt="">
+        <h2 class="text-2xl font-bold ">Oops!! Sorry, There is no content here</h2>
+    </div>
+   
+   </section>
+
+
+   <script src="index.js"></script>
+</body>
+</html>
