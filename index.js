@@ -1,3 +1,22 @@
+
+const showLoader = ()=>{
+  document.getElementById('loader').classList.remove('hidden')
+  document.getElementById('video-container').classList.add('hidden')
+}
+
+const hideLoader = ()=>{
+  document.getElementById('loader').classList.add('hidden')
+  document.getElementById('video-container').classList.remove('hidden')
+}
+
+function remove(){
+  const activeBtn = document.getElementsByClassName('active');
+  for(let btn of activeBtn){
+    btn.classList.remove('active')
+  }
+ 
+}
+
 function loadCategoris() {
   fetch('https://openapi.programming-hero.com/api/phero-tube/categories')
     .then((res) => res.json()
@@ -5,24 +24,61 @@ function loadCategoris() {
     )
 }
 
-function loadVideos() {
-  fetch('https://openapi.programming-hero.com/api/phero-tube/videos')
+function loadVideos(searchText = '') {
+  showLoader()
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
     .then((response) => response.json())
-    .then((data) => diasplyVideos(data.videos)
-
-    )
+    .then((data) =>{
+      document.getElementById("btn-all").classList.add('active')
+      
+      diasplyVideos(data.videos)})
 }
 
+const loadVideoDatails = (videoId) =>{
+  console.log(videoId);
+  const url = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}
+  `
+  fetch(url)
+  .then((res) => res.json())
+  .then((data) => displayVideos(data.video))
+}
+const displayVideos = (video)=>{
+  console.log(video);
+  document.getElementById('video_details').showModal()
+  const detailContainer = document.getElementById('details-container')
+  detailContainer.innerHTML =`
+  
+  <div class="card bg-base-100 image-full  shadow-sm">
+  <figure>
+    <img
+      src="${video.thumbnail}" />
+  </figure>
+  <div class="card-body">
+    <h2 class="${video}">Card Title</h2>
+    <p>     ${video.description} </p>
+    <div class="card-actions justify-end">
+      
+    </div>
+  </div>
+</div>
+  `
+
+
+}
+
+
 const loadCategorisVideos = (id) => {
-  console.log(id);
+  showLoader()
+  // console.log(id);
   const url = `https://openapi.programming-hero.com/api/phero-tube/category/${id} `
-  console.log(url);
+  // console.log(url);
   fetch(url)
   .then(res=>res.json())
   .then(data=>{
+    remove()
     const clickedButton = document.getElementById(`btn-${id}`)
     clickedButton.classList.add('active')
-    console.log(clickedButton);
+    // console.log(clickedButton);
     
     
     diasplyVideos(data.category)
@@ -45,7 +101,7 @@ function diasplyCategories(categories) {
 }
 
 const diasplyVideos = (videos) => {
-  console.log(videos);
+  // console.log(videos);
   const videoContainer = document.getElementById('video-container')
   videoContainer.innerHTML=''
 
@@ -56,6 +112,7 @@ const diasplyVideos = (videos) => {
     <h2 class="text-2xl font-bold ">Oops!! Sorry, There is no content here</h2>
 </div>
     `
+    hideLoader()
   return;
 }
 
@@ -80,20 +137,31 @@ const diasplyVideos = (videos) => {
                 <h2 class="text-sm font-semibold">MIdnigth Serenade</h2>
                 <p class="text-gray-400 flex gap-1 ">
                    ${video.authors[0].profile_name} 
+                   ${video.authors[0].verified == true ? `
                     <img class="w-5 h-5" src="https://img.icons8.com/?size=48&id=98A4yZTt9abw&format=png" alt="">
+
+                    `: ``}
+
                 </p>
                 <p class="text-gray-400 flex gap-1">${video.others.views}</p>
             </div>
 
 
         </div>
+        <button onclick=loadVideoDatails('${video.video_id}') class="btn btn-block">Show Details</button>
       </div>
 
         `
     videoContainer.append(videoCard)
   });
-
+hideLoader()
 }
+document.getElementById('search-inp').addEventListener('keyup',function(e){
+  const inp = e.target.value
+  loadVideos(inp)
+  
+})
+
 loadCategoris()
 
 
